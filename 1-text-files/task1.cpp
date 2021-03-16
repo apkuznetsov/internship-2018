@@ -1,20 +1,60 @@
-﻿// 1-text-files.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
-#include <iostream>
+﻿#include <fstream>
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	const char* FILE_NAME = "Hello.txt";
+	const char* INSERTED_LINE = "INSERTED";
+	const int K = 4;
+
+	FILE* myFile = fopen(FILE_NAME, "rt");
+	const char tempFileName[] = "tempFile.txt";
+	FILE* additFile = fopen(tempFileName, "wt");
+
+	if (!myFile || !additFile) {
+		puts("ошибка: невозможно открыть или создать файл\n");
+		return -1;
+	}
+
+	char ch;
+	int pos = 0;
+	int linesNumb = 1;
+	bool IsSuchLine = false;
+	while (!feof(myFile))
+	{
+		ch = fgetc(myFile);
+		fputc(ch, additFile);
+		++pos;
+		if (ch == '\n')
+		{
+			++linesNumb;
+			if (linesNumb == K + 1)	// запись после K-ой строки
+			{
+				fputs(INSERTED_LINE, additFile);
+				IsSuchLine = true;
+				break;
+			}
+		}
+	}
+
+	if (IsSuchLine)
+	{
+		while (!feof(myFile))
+		{
+			ch = fgetc(myFile);
+			fputc(ch, additFile);
+			++pos;
+		}
+		fclose(myFile);
+		fclose(additFile);
+		remove(FILE_NAME);
+		rename(tempFileName, FILE_NAME);
+	}
+	else
+	{
+		fclose(myFile);
+		fclose(additFile);
+		remove(tempFileName);
+		puts("строки с таким номером нет в файле — файл оставлен без изменений\n");
+	}
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
