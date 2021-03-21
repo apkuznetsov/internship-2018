@@ -31,8 +31,7 @@
 *.out
 *.app
 
-1-text-files/.vs/
-1-text-files/Debug/
+task1/.vs/
 
 task2/.vs/
 task2/obj/
