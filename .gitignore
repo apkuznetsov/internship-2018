@@ -32,6 +32,10 @@
 *.app
 
 task1/.vs/
+task1/obj/
 
 task2/.vs/
 task2/obj/
+
+task3/.vs/
+task3/obj/
